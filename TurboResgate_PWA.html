@@ -1,0 +1,550 @@
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta name="theme-color" content="#ff0033"&gt;
+    &lt;meta name="apple-mobile-web-app-capable" content="yes"&gt;
+    &lt;meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"&gt;
+    &lt;meta name="apple-mobile-web-app-title" content="TurboResgate"&gt;
+    &lt;link rel="manifest" href="manifest.json"&gt;
+    &lt;title&gt;TurboResgate Premium v2026&lt;/title&gt;
+    &lt;style&gt;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 10px;
+            padding-top: env(safe-area-inset-top, 20px);
+        }
+
+        .main-ui {
+            background-color: #0a0a0a;
+            border: 1px solid #222222;
+            display: flex;
+            flex-direction: column;
+            max-width: 950px;
+            margin: 0 auto;
+            min-height: calc(100vh - 40px);
+        }
+
+        .sidebar {
+            width: 100%;
+            height: auto;
+            background-color: #050505;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .profile-card {
+            display: none;
+        }
+
+        .sidebar-btn {
+            background: none;
+            border: none;
+            color: #888888;
+            font-size: 24px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .sidebar-btn:hover,
+        .sidebar-btn.active {
+            color: #ff0033;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-family: Impact, sans-serif;
+            font-size: 22px;
+            color: #ff0033;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            color: #888888;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-container {
+            background-color: #121212;
+            border: 1px solid #222222;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            padding: 12px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #888888;
+            font-size: 18px;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+        .log-panel {
+            background-color: #121212;
+            border: 1px solid #222222;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-text {
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        .config-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 12px;
+        }
+
+        .config-label {
+            color: #888888;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .config-input {
+            background-color: #121212;
+            border: none;
+            color: #00ff66;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px;
+            text-align: center;
+            width: 80px;
+        }
+
+        .config-input-red {
+            color: #ff0033;
+        }
+
+        .unit-select {
+            background-color: #121212;
+            border: 1px solid #222222;
+            color: #ffffff;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 5px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-label {
+            color: #ffffff;
+            font-size: 12px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background-color: #121212;
+            border: 1px solid #222222;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #888888;
+        }
+
+        .stat-value {
+            font-family: Consolas, monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff0033;
+            margin-top: 8px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 24px 0;
+        }
+
+        .action-btn {
+            font-family: Impact, sans-serif;
+            font-size: 18px;
+            border: none;
+            padding: 12px 40px;
+            cursor: pointer;
+        }
+
+        .start-btn {
+            background-color: #1a1a1a;
+            color: #888888;
+        }
+
+        .start-btn.connected {
+            background-color: #00ff66;
+            color: #000000;
+        }
+
+        .stop-btn {
+            background-color: #ff0033;
+            color: #ffffff;
+        }
+
+        .status-label {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ff0033;
+        }
+
+        .util-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .util-btn {
+            background: none;
+            border: none;
+            color: #888888;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .credit {
+            text-align: center;
+            margin-top: 36px;
+            font-size: 14px;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .install-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff0033;
+            color: #ffffff;
+            font-family: Impact, sans-serif;
+            font-size: 14px;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(255, 0, 51, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .main-ui {
+                flex-direction: row;
+                min-height: 610px;
+                height: 610px;
+            }
+
+            .sidebar {
+                width: 70px;
+                height: auto;
+                flex-direction: column;
+                padding: 15px 0;
+            }
+
+            .profile-card {
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .avatar {
+                width: 50px;
+                height: 50px;
+                background-color: #ff0033;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: bold;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0 auto;
+            }
+
+            .profile-name {
+                font-size: 11px;
+                font-weight: bold;
+                margin-top: 6px;
+            }
+
+            .profile-expiry {
+                font-size: 9px;
+                color: #888888;
+            }
+
+            body {
+                padding: 20px;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="main-ui"&gt;
+        &lt;div class="sidebar"&gt;
+            &lt;div class="profile-card"&gt;
+                &lt;div class="avatar"&gt;SW&lt;/div&gt;
+                &lt;div class="profile-name"&gt;! Sw&lt;/div&gt;
+                &lt;div class="profile-expiry"&gt;Expira em: Vitalício&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;button class="sidebar-btn active" onclick="switchSection('TOKEN')" data-section="TOKEN"&gt;🔑&lt;/button&gt;
+            &lt;button class="sidebar-btn" onclick="switchSection('SERVER')" data-section="SERVER"&gt;🌐&lt;/button&gt;
+            &lt;button class="sidebar-btn" onclick="switchSection('CANAIS')" data-section="CANAIS"&gt;📁&lt;/button&gt;
+            &lt;button class="sidebar-btn" onclick="switchSection('LOGS')" data-section="LOGS"&gt;📝&lt;/button&gt;
+            &lt;button class="sidebar-btn" onclick="switchSection('EXTRA')" data-section="EXTRA"&gt;⚙️&lt;/button&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="content-area"&gt;
+            &lt;div id="section_TOKEN"&gt;
+                &lt;h2 class="section-title"&gt;CONFIGURAÇÃO DE ACESSO&lt;/h2&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label class="input-label"&gt;DISCORD TOKEN (USER)&lt;/label&gt;
+                    &lt;div class="input-container"&gt;
+                        &lt;input type="password" class="input-field" id="token_entry"&gt;
+                        &lt;button class="toggle-btn" onclick="toggleToken()"&gt;👁&lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div id="section_SERVER" class="hidden"&gt;
+                &lt;h2 class="section-title"&gt;CONFIGURAÇÃO DO SERVIDOR&lt;/h2&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label class="input-label"&gt;SERVER ID (GUILD)&lt;/label&gt;
+                    &lt;div class="input-container"&gt;
+                        &lt;input type="text" class="input-field" id="guild_entry"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label class="input-label"&gt;CARGO STAFF ID (MENTION)&lt;/label&gt;
+                    &lt;div class="input-container"&gt;
+                        &lt;input type="text" class="input-field" id="staff_entry"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div id="section_CANAIS" class="hidden"&gt;
+                &lt;h2 class="section-title"&gt;CONFIGURAÇÃO DE CANAIS&lt;/h2&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label class="input-label"&gt;CATEGORY ID (MONITOR)&lt;/label&gt;
+                    &lt;div class="input-container"&gt;
+                        &lt;input type="text" class="input-field" id="category_entry"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label class="input-label"&gt;CANAL DE LOGS ID (DISCORD)&lt;/label&gt;
+                    &lt;div class="input-container"&gt;
+                        &lt;input type="text" class="input-field" id="log_channel_entry"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label class="input-label"&gt;MSG BOAS-VINDAS&lt;/label&gt;
+                    &lt;div class="input-container"&gt;
+                        &lt;input type="text" class="input-field" id="welcome_entry" value="salve dog como posso ajudar?"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div id="section_LOGS" class="hidden"&gt;
+                &lt;h2 class="section-title"&gt;CONSOLE DE ATIVIDADES&lt;/h2&gt;
+                &lt;div class="log-panel"&gt;
+                    &lt;div class="log-text" id="logBox"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div id="section_EXTRA" class="hidden"&gt;
+                &lt;h2 class="section-title"&gt;PAINEL DE CONTROLE&lt;/h2&gt;
+                
+                &lt;div class="config-row"&gt;
+                    &lt;label class="config-label"&gt;DELAY DE RESGATE:&lt;/label&gt;
+                    &lt;input type="text" class="config-input" id="delay_entry" value="1"&gt;
+                    &lt;select class="unit-select" id="delay_unit"&gt;
+                        &lt;option value="µs"&gt;µs&lt;/option&gt;
+                        &lt;option value="ms" selected&gt;ms&lt;/option&gt;
+                        &lt;option value="s"&gt;s&lt;/option&gt;
+                    &lt;/select&gt;
+                &lt;/div&gt;
+
+                &lt;div class="config-row"&gt;
+                    &lt;label class="config-label"&gt;ESPERAR ENTRE TICKETS (SEG):&lt;/label&gt;
+                    &lt;input type="text" class="config-input config-input-red" id="cooldown_entry" value="0"&gt;
+                &lt;/div&gt;
+
+                &lt;div class="config-row"&gt;
+                    &lt;label class="config-label"&gt;MODO:&lt;/label&gt;
+                    &lt;div class="radio-group"&gt;
+                        &lt;label class="radio-label"&gt;&lt;input type="radio" name="speed_mode" value="Seguro"&gt; Seguro&lt;/label&gt;
+                        &lt;label class="radio-label"&gt;&lt;input type="radio" name="speed_mode" value="Turbo" checked&gt; Turbo&lt;/label&gt;
+                        &lt;label class="radio-label"&gt;&lt;input type="radio" name="speed_mode" value="Rage"&gt; Rage&lt;/label&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="config-row"&gt;
+                    &lt;div class="checkbox-group"&gt;
+                        &lt;input type="checkbox" id="stream_mode"&gt;
+                        &lt;label for="stream_mode" style="color: #00ff66; font-size: 12px; font-weight: bold;"&gt;STREAM MODE (Ocultar App)&lt;/label&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="config-row"&gt;
+                    &lt;label class="config-label"&gt;META DIÁRIA:&lt;/label&gt;
+                    &lt;input type="text" class="config-input" id="meta_entry" value="0"&gt;
+                    &lt;div class="checkbox-group"&gt;
+                        &lt;input type="checkbox" id="ignore_dup" checked&gt;
+                        &lt;label for="ignore_dup" style="color: #ffffff; font-size: 12px;"&gt;IGNORAR REPETIDOS&lt;/label&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="config-row"&gt;
+                    &lt;label class="config-label"&gt;PULAR X TICKETS:&lt;/label&gt;
+                    &lt;input type="text" class="config-input config-input-red" id="skip_entry" value="0"&gt;
+                &lt;/div&gt;
+
+                &lt;div class="stats-container"&gt;
+                    &lt;div class="stat-card"&gt;
+                        &lt;div class="stat-title"&gt;Tickets Total&lt;/div&gt;
+                        &lt;div class="stat-value" id="card_tickets"&gt;0&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="stat-card"&gt;
+                        &lt;div class="stat-title"&gt;Tempo Online&lt;/div&gt;
+                        &lt;div class="stat-value" id="card_uptime"&gt;0h0m&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="stat-card"&gt;
+                        &lt;div class="stat-title"&gt;API Discord&lt;/div&gt;
+                        &lt;div class="stat-value" id="card_api"&gt;Offline 🔴&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="btn-group"&gt;
+                    &lt;button class="action-btn start-btn" id="start_btn"&gt;LIGAR TURBO&lt;/button&gt;
+                    &lt;button class="action-btn stop-btn"&gt;DESLIGAR&lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;div class="status-label" id="status_label"&gt;STATUS: DESCONECTADO&lt;/div&gt;
+
+                &lt;div class="util-buttons"&gt;
+                    &lt;button class="util-btn"&gt;Limpar Config&lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;div class="credit" id="credit"&gt;BY: !Sw&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;button class="install-btn hidden" id="installBtn"&gt;INSTALAR APP&lt;/button&gt;
+
+    &lt;script&gt;
+        let tokenVisible = false;
+        let deferredPrompt;
+
+        function switchSection(sectionName) {
+            document.querySelectorAll('[id^="section_"]').forEach(el =&gt; {
+                el.classList.add('hidden');
+            });
+            document.getElementById(`section_${sectionName}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-btn').forEach(btn =&gt; {
+                btn.classList.remove('active');
+                if (btn.dataset.section === sectionName) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function toggleToken() {
+            tokenVisible = !tokenVisible;
+            const input = document.getElementById('token_entry');
+            input.type = tokenVisible ? 'text' : 'password';
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) =&gt; {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').classList.remove('hidden');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () =&gt; {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('installBtn').classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .catch(error =&gt; console.log('Service Worker registration failed:', error));
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;

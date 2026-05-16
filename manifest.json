@@ -1,0 +1,23 @@
+
+{
+  "name": "TurboResgate Premium",
+  "short_name": "TurboResgate",
+  "description": "Sistema de resgate de tickets Discord",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ff0033",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=TurboResgate%20logo%20red%20and%20black%20modern%20design&amp;image_size=square",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=TurboResgate%20logo%20red%20and%20black%20modern%20design&amp;image_size=square_hd",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
